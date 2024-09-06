@@ -1,6 +1,7 @@
+// routes/router.js
 const express = require('express');
-const tasksController = require('./controllers/tasksController');
-const tasksMiddleware = require('./middlewares/tasksMiddleware');
+const tasksController = require('../controllers/tasksController');
+const tasksMiddleware = require('../middlewares/tasksMiddleware'); // Alteração do caminho
 const router = express.Router();
 
 router.get('/tasks', tasksController.getAll);
