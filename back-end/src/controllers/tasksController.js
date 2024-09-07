@@ -1,4 +1,3 @@
-// controllers/tasksController.js
 const tasksModel = require('../models/tasksModel');
 
 const getAll = async (req, res) => {
