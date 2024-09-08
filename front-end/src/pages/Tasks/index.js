@@ -1,7 +1,9 @@
+import TasksComponent from "../../components/tasks/tasksComponent";
+
 const Tasks = () => {
     return (
         <div>
-            <h1>Tasks</h1>
+            <TasksComponent />
         </div>
     );
 };
