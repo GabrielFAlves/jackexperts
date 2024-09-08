@@ -1,7 +1,6 @@
-// src/components/Modal.js
 import React from 'react';
 
-const ModalTasks = ({ isOpen, onClose, children }) => {
+const Modal = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
 
   const handleOverlayClick = (e) => {
@@ -28,4 +27,4 @@ const ModalTasks = ({ isOpen, onClose, children }) => {
   );
 };
 
-export default ModalTasks;
+export default Modal;

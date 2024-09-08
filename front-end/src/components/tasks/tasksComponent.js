@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTasks } from '../../contexts/TaskContext';
-import ModalTasks from '../modal/modalTasks';
+import Modal from '../modal/modal';
 
 const TasksComponent = () => {
   const {
@@ -73,8 +73,7 @@ const TasksComponent = () => {
           </tbody>
         </table>
       </div>
-
-      <ModalTasks isOpen={isCreateModalOpen} onClose={closeCreateModal}>
+      <Modal isOpen={isCreateModalOpen} onClose={closeCreateModal}>
         <h2 className="text-xl font-semibold mb-4">Create Task</h2>
         <form onSubmit={handleCreateTask} className="mb-4">
           <div className="mb-4">
@@ -91,15 +90,18 @@ const TasksComponent = () => {
           </div>
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="status">Status</label>
-            <input
+            <select
               id="status"
-              type="text"
               value={newTask.status}
               onChange={(e) => setNewTask({ ...newTask, status: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-md"
-              placeholder="Task status"
               required
-            />
+            >
+              <option value="">Select status</option>
+              <option value="pendente">Pendente</option>
+              <option value="em andamento">Em andamento</option>
+              <option value="concluido">Concluído</option>
+            </select>
           </div>
           <button
             type="submit"
@@ -108,9 +110,8 @@ const TasksComponent = () => {
             Add Task
           </button>
         </form>
-      </ModalTasks>
-
-      <ModalTasks isOpen={isEditModalOpen} onClose={closeEditModal}>
+      </Modal>
+      <Modal isOpen={isEditModalOpen} onClose={closeEditModal}>
         <h2 className="text-xl font-semibold mb-4">Edit Task</h2>
         <form onSubmit={handleUpdateTask}>
           <div className="mb-4">
@@ -126,14 +127,18 @@ const TasksComponent = () => {
           </div>
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="edit-status">Status</label>
-            <input
+            <select
               id="edit-status"
-              type="text"
               value={editingTask?.status || ''}
               onChange={(e) => setEditingTask({ ...editingTask, status: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-md"
               required
-            />
+            >
+              <option value="">Select status</option>
+              <option value="pendente">Pendente</option>
+              <option value="em andamento">Em andamento</option>
+              <option value="concluido">Concluído</option>
+            </select>
           </div>
           <button
             type="submit"
@@ -142,7 +147,7 @@ const TasksComponent = () => {
             Save Changes
           </button>
         </form>
-      </ModalTasks>
+      </Modal>
     </div>
   );
 };

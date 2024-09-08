@@ -1,4 +1,3 @@
-// src/contexts/AuthContext.js
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -12,11 +11,10 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // Checa se há um token salvo e define o usuário ao iniciar o contexto
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      setUser({ token }); // Define o usuário como autenticado se o token existir
+      setUser({ token });
     }
   }, []);
 

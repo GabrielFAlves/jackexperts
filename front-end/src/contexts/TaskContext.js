@@ -1,4 +1,3 @@
-// src/contexts/TaskContext.js
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useAuth } from './AuthContext';
@@ -9,7 +8,7 @@ export const useTasks = () => useContext(TaskContext);
 
 export const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
-  const [newTask, setNewTask] = useState({ title: '', status: '' }); // Alterado para status
+  const [newTask, setNewTask] = useState({ title: '', status: '' });
   const [editingTask, setEditingTask] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
@@ -50,7 +49,7 @@ export const TaskProvider = ({ children }) => {
       await axios.post('http://localhost:3333/api/tasks', newTask, {
         headers: { Authorization: token },
       });
-      setNewTask({ title: '', status: '' }); // Alterado para status
+      setNewTask({ title: '', status: '' });
       setTasks((prevTasks) => [...prevTasks, newTask]);
     } catch (err) {
       setError('Failed to create task');
