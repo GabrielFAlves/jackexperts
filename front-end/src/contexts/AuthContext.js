@@ -1,23 +1,27 @@
 // src/contexts/AuthContext.js
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-// Cria o contexto de autenticação
 const AuthContext = createContext();
 
-// Hook personalizado para acessar o contexto de autenticação
 export const useAuth = () => useContext(AuthContext);
 
-// Provider que envolverá a aplicação para fornecer o estado de autenticação
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // Estado do usuário autenticado
+  const [user, setUser] = useState(null);
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // Função para realizar o login
+  // Checa se há um token salvo e define o usuário ao iniciar o contexto
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setUser({ token }); // Define o usuário como autenticado se o token existir
+    }
+  }, []);
+
   const login = async (email, password) => {
-    setError(''); // Limpa o erro antes do login
+    setError('');
     try {
       const response = await axios.post('http://localhost:3333/api/auth/login', {
         email,
@@ -25,40 +29,37 @@ export const AuthProvider = ({ children }) => {
       });
 
       const token = response.data.token;
-      localStorage.setItem('token', token); // Salva o token no localStorage
-      setUser({ email }); // Atualiza o estado do usuário
-      navigate('/tasks'); // Redireciona para uma rota protegida
+      localStorage.setItem('token', token);
+      setUser({ email });
+      navigate('/tasks');
     } catch (err) {
       const errorMsg = err.response?.data?.message || 'Falha no login. Verifique suas credenciais.';
       setError(errorMsg);
     }
   };
 
-  // Função para registrar um novo usuário
   const register = async (email, password) => {
-    setError(''); // Limpa o erro antes do registro
+    setError('');
     try {
-      const response = await axios.post('http://localhost:3333/api/auth/register', {
+      await axios.post('http://localhost:3333/api/auth/register', {
         email,
         password,
       });
 
-      alert('Usuário registrado com sucesso!'); // Mensagem de sucesso
-      navigate('/'); // Redireciona para a página de login após o registro
+      alert('Usuário registrado com sucesso!');
+      navigate('/');
     } catch (err) {
       const errorMsg = err.response?.data?.message || 'Falha no registro. Tente novamente.';
       setError(errorMsg);
     }
   };
 
-  // Função para realizar o logout
   const logout = () => {
-    localStorage.removeItem('token'); // Remove o token do armazenamento
-    setUser(null); // Limpa o estado do usuário
-    navigate('/'); // Redireciona para a página de login
+    localStorage.removeItem('token');
+    setUser(null);
+    navigate('/');
   };
 
-  // Valor do contexto, com o estado do usuário e as funções de autenticação
   const value = {
     user,
     login,

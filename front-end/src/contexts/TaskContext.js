@@ -9,7 +9,7 @@ export const useTasks = () => useContext(TaskContext);
 
 export const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
-  const [newTask, setNewTask] = useState({ title: '', description: '' });
+  const [newTask, setNewTask] = useState({ title: '', status: '' }); // Alterado para status
   const [editingTask, setEditingTask] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
@@ -26,7 +26,7 @@ export const TaskProvider = ({ children }) => {
       }
       try {
         const response = await axios.get('http://localhost:3333/api/tasks', {
-          headers: { 'Authorization': token }
+          headers: { Authorization: token },
         });
         setTasks(response.data);
       } catch (err) {
@@ -48,10 +48,10 @@ export const TaskProvider = ({ children }) => {
     }
     try {
       await axios.post('http://localhost:3333/api/tasks', newTask, {
-        headers: { 'Authorization': token }
+        headers: { Authorization: token },
       });
-      setNewTask({ title: '', description: '' });
-      setTasks(prevTasks => [...prevTasks, newTask]);
+      setNewTask({ title: '', status: '' }); // Alterado para status
+      setTasks((prevTasks) => [...prevTasks, newTask]);
     } catch (err) {
       setError('Failed to create task');
     }
@@ -66,9 +66,9 @@ export const TaskProvider = ({ children }) => {
     }
     try {
       await axios.put(`http://localhost:3333/api/tasks/${editingTask.id}`, editingTask, {
-        headers: { 'Authorization': token }
+        headers: { Authorization: token },
       });
-      setTasks(tasks.map(task => (task.id === editingTask.id ? editingTask : task)));
+      setTasks(tasks.map((task) => (task.id === editingTask.id ? editingTask : task)));
       setEditingTask(null);
     } catch (err) {
       setError('Failed to update task');
@@ -83,9 +83,9 @@ export const TaskProvider = ({ children }) => {
     }
     try {
       await axios.delete(`http://localhost:3333/api/tasks/${id}`, {
-        headers: { 'Authorization': token }
+        headers: { Authorization: token },
       });
-      setTasks(tasks.filter(task => task.id !== id));
+      setTasks(tasks.filter((task) => task.id !== id));
     } catch (err) {
       setError('Failed to delete task');
     }

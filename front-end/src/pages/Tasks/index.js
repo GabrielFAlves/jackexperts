@@ -1,9 +1,11 @@
+import HeaderComponent from "../../components/header/headerComponent";
 import TasksComponent from "../../components/tasks/tasksComponent";
 
 const Tasks = () => {
     return (
         <div>
-            <TasksComponent />
+          <HeaderComponent />
+          <TasksComponent />
         </div>
     );
 };
