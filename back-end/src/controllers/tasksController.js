@@ -1,30 +1,52 @@
-const tasksModel = require('../models/tasksModel');
+// controllers/tasksController.js
+const tasksService = require('../services/tasksService');
 
 const getAll = async (req, res) => {
-    const tasks = await tasksModel.getAll();
-    return res.status(200).json(tasks);
+    try {
+        const userId = req.user.id; // Pega o userId do token JWT decodificado
+        const tasks = await tasksService.getAllTasks(userId);
+        return res.status(200).json(tasks);
+    } catch (error) {
+        res.status(500).json({ message: 'Erro ao obter tarefas', error: error.message });
+    }
 };
 
 const createTask = async (req, res) => {
-    const createdTask = await tasksModel.createTask(req.body);
-    return res.status(201).json(createdTask);
-};
-
-const deleteTask = async (req, res) => {
-    const { id } = req.params;
-    await tasksModel.deleteTask(id);
-    return res.status(204).json();
+    try {
+        const userId = req.user.id;
+        const createdTask = await tasksService.createTask(req.body, userId);
+        return res.status(201).json(createdTask);
+    } catch (error) {
+        res.status(500).json({ message: 'Erro ao criar tarefa', error: error.message });
+    }
 };
 
 const updateTask = async (req, res) => {
-    const { id } = req.params;
-    await tasksModel.updateTask(id, req.body);
-    return res.status(204).json();
+    try {
+        const userId = req.user.id;
+        const taskId = req.params.taskId; // Use o nome correto 'taskId'
+        const updatedData = req.body;
+        const updatedTask = await tasksService.updateTask(taskId, updatedData, userId);
+        return res.status(200).json(updatedTask);
+    } catch (error) {
+        res.status(500).json({ message: 'Erro ao atualizar tarefa', error: error.message });
+    }
+};
+
+const deleteTask = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const taskId = req.params.taskId; // Use o nome correto 'taskId'
+        await tasksService.deleteTask(taskId, userId);
+        return res.status(200).json({ message: 'Tarefa deletada com sucesso' });
+    } catch (error) {
+        res.status(500).json({ message: 'Erro ao deletar tarefa', error: error.message });
+    }
 };
 
 module.exports = {
     getAll,
     createTask,
-    deleteTask,
     updateTask,
+    deleteTask
 };

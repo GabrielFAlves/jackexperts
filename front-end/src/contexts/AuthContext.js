@@ -34,6 +34,23 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Função para registrar um novo usuário
+  const register = async (email, password) => {
+    setError(''); // Limpa o erro antes do registro
+    try {
+      const response = await axios.post('http://localhost:3333/api/auth/register', {
+        email,
+        password,
+      });
+
+      alert('Usuário registrado com sucesso!'); // Mensagem de sucesso
+      navigate('/'); // Redireciona para a página de login após o registro
+    } catch (err) {
+      const errorMsg = err.response?.data?.message || 'Falha no registro. Tente novamente.';
+      setError(errorMsg);
+    }
+  };
+
   // Função para realizar o logout
   const logout = () => {
     localStorage.removeItem('token'); // Remove o token do armazenamento
@@ -45,6 +62,7 @@ export const AuthProvider = ({ children }) => {
   const value = {
     user,
     login,
+    register,
     logout,
     error,
   };

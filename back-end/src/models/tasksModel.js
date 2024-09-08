@@ -1,34 +1,33 @@
+// models/tasksModel.js
 const connection = require('../connection');
 
-const getAll = async () => {
-    const [tasks] = await connection.execute('SELECT * FROM tasks');
+const getAllByUserId = async (userId) => {
+    const [tasks] = await connection.execute('SELECT * FROM tasks WHERE user_id = ?', [userId]);
     return tasks;
 };
 
-const createTask = async (task) => {
+const createTask = async (task, userId) => {
     const { title } = task;
-    const dateUTC = new Date(Date.now()).toUTCString();
-    const query = 'INSERT INTO tasks(title, status, created_at) VALUE (?, ?, ?)';
-    const [createdTask] = await connection.execute(query, [title, 'pendente', dateUTC]);
-    return {insertId: createdTask.insertId};
-}
+    const dateUTC = new Date().toISOString(); // Alternativa ao Date.toUTCString()
+    const query = 'INSERT INTO tasks (title, status, created_at, user_id) VALUES (?, ?, ?, ?)';
+    const [createdTask] = await connection.execute(query, [title, 'pendente', dateUTC, userId]);
+    return { insertId: createdTask.insertId };
+};
 
-const deleteTask = async (id) => {
-    const [removedTask] = await connection.execute('DELETE FROM tasks WHERE id = ?', [id]);
+const deleteTask = async (id, userId) => {
+    const [removedTask] = await connection.execute('DELETE FROM tasks WHERE id = ? AND user_id = ?', [id, userId]);
     return removedTask;
-}
+};
 
-const updateTask = async (id, task) => {
+const updateTask = async (id, task, userId) => {
     const { title, status } = task;
-    
-    const query = 'UPDATE tasks SET title = ?, status = ? WHERE id = ?';
-  
-    const [updatedTask] = await connection.execute(query, [title, status, id]);
+    const query = 'UPDATE tasks SET title = ?, status = ? WHERE id = ? AND user_id = ?';
+    const [updatedTask] = await connection.execute(query, [title, status, id, userId]);
     return updatedTask;
-  };
+};
 
 module.exports = {
-    getAll,
+    getAllByUserId,
     createTask,
     deleteTask,
     updateTask,
