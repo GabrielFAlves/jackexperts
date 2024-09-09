@@ -133,6 +133,6 @@ npm start
 
 ## Uso
 
-1. Acesse [http://localhost:5173](http://localhost:5173) no seu navegador.
+1. Acesse [http://localhost:5173](http://localhost:3000) no seu navegador.
 2. Registre um novo usuário ou faça login com suas credenciais.
 3. Gerencie suas tarefas: crie, edite e exclua conforme necessário. As tarefas são privadas e visíveis apenas para o usuário que as criou.
